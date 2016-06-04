@@ -90,6 +90,12 @@ def gener(file_name):
 				temp_line.append(item)
 			yield temp_line
 
+## add more data
+def gener_more(file_name):
+	with codecs.open(file_name,"r","utf-8") as f:
+		for line in f:
+			word = line.strip('\n')
+			yield word
 
 if __name__ == '__main__':
 	print "########################################################"
@@ -99,6 +105,9 @@ if __name__ == '__main__':
 	for lines in gener('data.txt'):
 		for word in lines:
 			tree.addWord(word)
+
+	for word in gener_more('more_data.txt'):
+		tree.addWord(word)
 
 	print "Initializing finished!"
 	print "########################################################"

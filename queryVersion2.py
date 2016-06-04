@@ -145,16 +145,43 @@ def gener(file_name):
 				temp_line.append(item)
 			yield temp_line
 
+## add more data
+def gener_more(file_name):
+	with codecs.open(file_name,"r","utf-8") as f:
+		for line in f:
+			word = line.strip('\n')
+			yield word
 
 if __name__ == '__main__':
 	print "########################################################"
 	print "Hello Prof:"
-	print "Initializing: buiding tree..."
-	tree = edge()
+	print "choose a version  (normal data or massive data:"
+	print "0: normal data as given"
+	print "1: random generated massive data, this may take 20s to build a tree\n\n"
+	version = None
+	while True:
+		version = raw_input("please choose a version:\n").decode(sys.stdin.encoding)
+		if version ==u'0' or version == u'1':
+			break
+	print "\n\n"
+	if version ==u'0':
+		print "Initializing: buiding tree...\n"
+		tree = edge()
+	
+		for lines in gener('data.txt'):
+			for word in lines:
+				tree.addWord(word)
 
-	for lines in gener('data.txt'):
-		for word in lines:
+	elif version ==u'1':
+		print "Initializing: buiding tree..."
+		tree = edge()
+	
+		for lines in gener('data.txt'):
+			for word in lines:
+				tree.addWord(word)
+		for word in gener_more('more_data.txt'):
 			tree.addWord(word)
+
 
 
 	print "Initializing finished!"
@@ -174,10 +201,10 @@ if __name__ == '__main__':
 		# res.append([])
 		queryMidWord(word, tree, result)
 		res = result
+	
 
 
-
-		if (res[0] == -1 and res[1] == -1) or (len(res[0])==0 and len(res[1])==0):
+		if (res[0] == -1 or res[0] == []) and (res[1]==-1 or res[1]==[]):
 			print "******************************************"
 			print "Not Found!"
 			print "******************************************\n\n"
@@ -185,13 +212,15 @@ if __name__ == '__main__':
 		else:
 			print "******************************************"
 			#show 15 items at most
-			print "***************show begin*****************"
 			show_len = len(res[0]) if len(res[0])<=10 else 10
+			print u"***************show first: 总条数:%d,显示条数:%d*****************" % (len(res[0]),show_len)
+			
 			for item in res[0][:show_len]:
 				print item," Prefix: ",tree.countPrefix(item)," Word: ", tree.countWord(item)
-			print "\n\n\n***************show mid*****************"
 
 			show_len = len(res[1]) if len(res[1])<=10 else 10
+			print u"\n\n\n***************show middle: 总条数:%d,显示条数:%d*****************" % (len(res[1]),show_len)
+
 			for item in res[1][:show_len]:
 				print item," Prefix: ",tree.countPrefix(item)," Word: ", tree.countWord(item)
 
