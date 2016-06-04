@@ -11,7 +11,7 @@ length = len(all_char)
 
 new_words = []
 
-for ii in range(30000):
+for ii in range(100000):
 	char_index = np.random.randint(1,length,(1,np.random.randint(1,16)))[0]
 	res = [all_char[index] for index in char_index]
 	word = ''.join(res)

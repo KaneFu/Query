@@ -87,7 +87,7 @@ def get_father_string(node,result):
 
 def queryWord(word,result,node,initial_word):
 	if word == '':
-		result.append(initial_word)
+		# result.append(initial_word)
 		#store all the items below
 		get_subword(node, initial_word, result)
 		return result
