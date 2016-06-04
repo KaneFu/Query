@@ -205,26 +205,27 @@ if __name__ == '__main__':
 
 
 		if (res[0] == -1 or res[0] == []) and (res[1]==-1 or res[1]==[]):
-			print "******************************************"
+			print "*********************************************************"
 			print "Not Found!"
-			print "******************************************\n\n"
+			print "*********************************************************\n\n"
 
 		else:
-			print "******************************************"
+			print "************************************************************************"
 			#show 15 items at most
 			show_len = len(res[0]) if len(res[0])<=10 else 10
 			print u"***************show first: 总条数:%d,显示条数:%d*****************" % (len(res[0]),show_len)
 			
 			for item in res[0][:show_len]:
-				print item," Prefix: ",tree.countPrefix(item)," Word: ", tree.countWord(item)
+				print "%-20s \t\tPrefix: %d\tWord:%d"%(item,tree.countPrefix(item),tree.countWord(item))
+				# print item,"\tPrefix: ",tree.countPrefix(item),"\tWord: ", tree.countWord(item)
 
 			show_len = len(res[1]) if len(res[1])<=10 else 10
 			print u"\n\n\n***************show middle: 总条数:%d,显示条数:%d*****************" % (len(res[1]),show_len)
 
 			for item in res[1][:show_len]:
-				print item," Prefix: ",tree.countPrefix(item)," Word: ", tree.countWord(item)
+				print "%-20s \t\tPrefix: %d\tWord:%d"%(item,tree.countPrefix(item),tree.countWord(item))
 
-			print "******************************************\n\n"
+			print "************************************************************************\n\n"
 
 
 
