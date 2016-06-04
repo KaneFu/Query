@@ -33,13 +33,11 @@ class edge():
 				self.sons[k].letter = k
 			sub_items = self.__class__.sub_dict.get(k)
 			if sub_items == None:
-				self.__class__.sub_dict[k] = [self.sons[k]]
+				self.__class__.sub_dict[k] = [[self.sons[k].id],[self.sons[k]]]
 			else:
-				for sub_item in sub_items:
-					if self.sons[k].id == sub_item.id:
-						break
-					else:
-						sub_items.append(self.sons[k])
+				if self.sons[k].id not in self.__class__.sub_dict[k][0]:
+					sub_items[0].append(self.sons[k].id)
+					sub_items[1].append(self.sons[k])
 			word = word[1:]
 			self.sons[k].addWord(word)
 
@@ -105,12 +103,16 @@ def queryWord(word,result,node,initial_word):
 
 def queryMidWord(word,node,result):
 	k = word[0]
-	node_list = node.__class__.sub_dict.get(k)
-	# final_result = []
-	if len(node_list) == 0:
-		pass
-		# return -1
+	temp = node.__class__.sub_dict.get(k)
+	if temp == None:
+		result[1] = -1
 	else:
+		node_list = temp[1]
+	# # final_result = []
+	# if len(node_list) == 0:
+	# 	pass
+	# 	# return -1
+	# else:
 		for midNode in node_list:
 			temp_result = []
 			res = queryWord(word, temp_result, midNode.father, word)
@@ -120,12 +122,12 @@ def queryMidWord(word,node,result):
 				pass
 			else:
 				letters_above = []
-				get_father_string(midNode, letters_above)
+				get_father_string(midNode.father, letters_above)
 				string_above = ''.join(reversed(letters_above))
 				for item in res:
 					temp = string_above+item
-					if temp not in result:
-						result.append(temp)
+					if temp not in result[0]:
+						result[1].append(temp)
 
 
 
@@ -149,10 +151,11 @@ if __name__ == '__main__':
 	print "Hello Prof:"
 	print "Initializing: buiding tree..."
 	tree = edge()
-	# tree.__class__.root = tree
+
 	for lines in gener('data.txt'):
 		for word in lines:
 			tree.addWord(word)
+
 
 	print "Initializing finished!"
 	print "########################################################"
@@ -163,14 +166,18 @@ if __name__ == '__main__':
 			print "Please enter some words!"
 			print "******************************************\n\n"
 			continue
-		result = []
+		result = [[],[]]
 		initial_word = word
-		res = queryWord(word, result, tree, initial_word)
-		queryMidWord(word, tree, res)
+		res = queryWord(word, result[0], tree, initial_word)
+		# if res == -1:
+		# 	res = []
+		# res.append([])
+		queryMidWord(word, tree, result)
+		res = result
 
 
 
-		if res == -1 or len(res)==0:
+		if (res[0] == -1 and res[1] == -1) or (len(res[0])==0 and len(res[1])==0):
 			print "******************************************"
 			print "Not Found!"
 			print "******************************************\n\n"
@@ -178,10 +185,16 @@ if __name__ == '__main__':
 		else:
 			print "******************************************"
 			#show 15 items at most
-			show_len = len(res) if len(res)<=30 else 30
-
-			for item in res[:show_len]:
+			print "***************show begin*****************"
+			show_len = len(res[0]) if len(res[0])<=10 else 10
+			for item in res[0][:show_len]:
 				print item," Prefix: ",tree.countPrefix(item)," Word: ", tree.countWord(item)
+			print "\n\n\n***************show mid*****************"
+
+			show_len = len(res[1]) if len(res[1])<=10 else 10
+			for item in res[1][:show_len]:
+				print item," Prefix: ",tree.countPrefix(item)," Word: ", tree.countWord(item)
+
 			print "******************************************\n\n"
 
 
